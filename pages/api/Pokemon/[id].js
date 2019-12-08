@@ -1,10 +1,15 @@
-import fetch from 'isomorphic-unfetch'
+import fetch from 'isomorphic-unfetch';
+import Cors from 'micro-cors';
+
+const cors = Cors({
+    allowedMethods: ['GET', 'PUT', 'POST']
+});
 
 const POKE_API = "https://pokeapi.co/api/v2";
 
 const getPokemon = (id) => fetch(`${POKE_API}/pokemon/${id}`).then(res => res.json());
 
-export default async (req, res) => {
+export default cors(async (req, res) => {
     const {
       query: { id, name },
       method
@@ -36,4 +41,4 @@ export default async (req, res) => {
         res.setHeader('Allow', ['GET', 'PUT'])
         res.status(405).end(`Method ${method} Not Allowed`)
     }
-  }
+  })

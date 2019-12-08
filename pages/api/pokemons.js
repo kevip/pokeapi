@@ -1,4 +1,9 @@
 import fetch from 'isomorphic-unfetch';
+import Cors from 'micro-cors';
+
+const cors = Cors({
+    allowedMethods: ['GET', 'PUT', 'POST']
+});
 
 const POKE_API = "https://pokeapi.co/api/v2";
 
@@ -14,7 +19,7 @@ const getPokemons = async () => {
     );
 }
 
-export default async (req, res) => {    
+export default cors(async (req, res) => {    
     let pokemons = await getPokemons();
     res.status(200).json(pokemons);
-}
+})
